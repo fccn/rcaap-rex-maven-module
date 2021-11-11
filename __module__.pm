@@ -1,5 +1,8 @@
 package Rex::Module::Development::Maven;
 
+use strict;
+use warnings;
+
 use Rex -base;
 
 our $__package_name = {
@@ -17,8 +20,8 @@ our $__program_name = {
 	mageia => "mvn",
 };
 
-our $__mvn_opts = "-Xmx512M -Xms64M -Dfile.encoding=UTF-8";
-our $__mvn_cwd = "/";
+our $__mvn_opts = '-Xmx512M -Xms64M -Dfile.encoding=UTF-8';
+our $__mvn_cwd = '/';
 
 task setup => sub {
 	pkg param_lookup ("package_name", case ( lc(operating_system()), $__package_name )),
@@ -27,13 +30,14 @@ task setup => sub {
 
 task mvn => sub {
 	my $command = shift;
-	my $base_dir = param_lookup ("cwd", case ( lc(operating_system()), $__mvn_cwd ));
 
-	Rex::Logger::info("Running mvn $command (this action may take some time)");  
+	my $base_dir = param_lookup ("cwd", $__mvn_cwd );
+
+	Rex::Logger::info("Running mvn $command (this action may take some time)");
 	run param_lookup ("package_name", case ( lc(operating_system()), $__program_name ))." $command",
 		cwd => $base_dir,
 		env => {
-			MAVEN_OPTS => param_lookup ("opts", case ( lc(operating_system()), $__mvn_opts )),
+			MAVEN_OPTS => param_lookup ("opts", $__mvn_opts ),
 		};
 	die("Error running mvn command.") unless ($? == 0);
 };
