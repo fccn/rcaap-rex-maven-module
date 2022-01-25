@@ -5,6 +5,7 @@ License: GPLv3
 
 # Only if you have dependencies to other Rex Modules.
 Require:
-    Rex/Lang/Java:
+  Rex/Lang/Java:
         git: https://github.com/fccn/rex-recipes.git
         branch: "Rex/Lang/Java"
+        
