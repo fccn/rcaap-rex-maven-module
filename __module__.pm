@@ -28,7 +28,7 @@ task setup => sub {
 		ensure    => "latest";
 };
 
-task mvn => sub {
+sub mvn {
 	my $command = shift;
 
 	my $base_dir = param_lookup ("cwd", $__mvn_cwd );
@@ -36,6 +36,10 @@ task mvn => sub {
 	Rex::Logger::info("Running mvn $command (this action may take some time)");
 	run param_lookup ("package_name", case ( lc(operating_system()), $__program_name ))." $command",
 		cwd => $base_dir,
+		continuous_read => sub {
+			#output to log
+			Rex::Logger::info(@_);
+		},
 		env => {
 			MAVEN_OPTS => param_lookup ("opts", $__mvn_opts ),
 		};
