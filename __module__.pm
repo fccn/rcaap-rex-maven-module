@@ -2,7 +2,7 @@ package Rex::Module::Development::Maven;
 
 use strict;
 use warnings;
-
+use Data::Dumper;
 use Rex -base;
 
 our $__package_name = {
@@ -30,8 +30,10 @@ task setup => sub {
 
 sub mvn {
 	my $command = shift;
+	my (%options) = @_;
+	my $options = {%options};
 
-	my $base_dir = param_lookup ("cwd", $__mvn_cwd );
+	my $base_dir = (defined($options->{'cwd'})) ? $options->{'cwd'} : param_lookup ("cwd", $__mvn_cwd );
 
 	Rex::Logger::info("Running mvn $command (this action may take some time)");
 	run param_lookup ("program_name", case ( lc(operating_system()), $__program_name ))." $command",
